@@ -6,5 +6,5 @@ configurations:
 - description: Exported plugins
   includePlugins:
     hashicorp-vault:
-      version: 351.vdb_f83a_1c6a_9d
+      version: 336.v182c0fbaaeb7
     
