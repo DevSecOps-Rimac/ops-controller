@@ -20,7 +20,7 @@ unclassified:
     activities:
     - "build"
     - "web"
-    enabled: true
+    enabled: false
     gracePeriod: 1500
   gitHubConfiguration:
     apiRateLimitChecker: ThrottleForNormalize
