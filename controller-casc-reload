@@ -6,7 +6,7 @@ pipeline {
   }
   options { timeout(time: 5, unit: 'MINUTES') }
   environment {
-    GitHubOrganization = event.github.organization.login.toString().replaceAll(" ", "-")
+    GitHubOrganization = event.github.organization.toString().replaceAll(" ", "-")
     GitHubApp = "cloudbees-ci-workshop"
     controllerFolder = GitHubOrganization.toLowerCase()
     controllerName = "controller"
