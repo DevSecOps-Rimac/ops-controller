@@ -27,5 +27,6 @@ plugins:
 - id: warnings-ng
 - id: workflow-aggregator
 - id: workflow-cps-checkpoint
+- id: saml
 # non-cap plugins
 - id: hashicorp-vault-plugin
