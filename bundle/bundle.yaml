@@ -11,5 +11,3 @@ catalog:
   - "plugin-catalog.yaml"
 items:
   - "items.yaml"
-catalog:
-  - "plugin-catalog.yaml"
