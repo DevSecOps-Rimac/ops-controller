@@ -51,9 +51,9 @@ items:
         branches: .*
   - concurrentBuild: true
     kind: pipeline
-    displayName: cbci-workshop-module-2-setup
+    displayName: controller-casc-reload
     resumeBlocked: false
-    name: cbci-workshop-module-2-setup
+    name: controller-casc-reload
     description: ''
     definition:
       cpsScmFlowDefinition:
