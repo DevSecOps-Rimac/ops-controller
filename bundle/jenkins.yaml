@@ -11,7 +11,7 @@ jenkins:
       - key: "BUNDLE_ID"
         value: "${CASC_BUNDLE_ID}"
   quietPeriod: 0
-  systemMessage: 'Jenkins configured using CloudBees CI CasC v2 Jhon'
+  systemMessage: 'Jenkins configured using CloudBees CI CasC v3 Jhon'
 notificationConfiguration:
   enabled: true
   router: "operationsCenter"
