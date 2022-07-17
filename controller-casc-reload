@@ -2,13 +2,12 @@ def event = currentBuild.getBuildCauses()[0].event
 pipeline {
   agent none  
   triggers {
-    eventTrigger jmespathQuery("action=='casc_bundle_update'")
+    eventTrigger jmespathQuery("controller.action=='casc_bundle_update'")
   }
   options { timeout(time: 5, unit: 'MINUTES') }
   environment {
-    GitHubOrganization = event.organization.login.toString().replaceAll(" ", "-")
+    GitHubOrganization = event.github.organization.login.toString().replaceAll(" ", "-")
     GitHubApp = "cloudbees-ci-workshop"
-    GitHubUsername = event.sender.login.toString().toLowerCase()
     controllerFolder = GitHubOrganization.toLowerCase()
     controllerName = "controller"
     bundleName = "${controllerFolder}-${controllerName}"

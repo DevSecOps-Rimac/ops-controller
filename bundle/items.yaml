@@ -78,4 +78,4 @@ items:
         - eventTrigger:
             condition:
               jmespathQuery:
-                query: action=='casc_bundle_update'
+                query: controller.action=='casc_bundle_update'
