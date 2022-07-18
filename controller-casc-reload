@@ -1,0 +1,54 @@
+def event = currentBuild.getBuildCauses()[0].event
+pipeline {
+  agent none  
+  triggers {
+    eventTrigger jmespathQuery("controller.action=='casc_bundle_update'")
+  }
+  options { timeout(time: 5, unit: 'MINUTES') }
+  environment {
+    GitHubOrganization = event.github.organization.toString().replaceAll(" ", "-")
+    GitHubApp = "cloudbees-ci-workshop"
+    controllerFolder = GitHubOrganization.toLowerCase()
+    controllerName = "controller"
+    bundleName = "${controllerFolder}-${controllerName}"
+    jenkinsUrl = event.source.buildInfo.jenkinsUrl.toLowerCase()
+  }
+  stages {
+    stage('Update Config Bundle') {
+      when {
+        beforeAgent true
+        triggeredBy 'EventTriggerCause'
+      }
+      agent {
+        kubernetes {
+          label 'kubectl'
+          yaml """
+kind: Pod
+metadata:
+  name: kubectl
+spec:
+  serviceAccountName: jenkins
+  containers:
+  - name: kubectl
+    image: gcr.io/cloud-builders/kubectl
+    resources:
+      requests:
+        memory: "500Mi"
+    command:
+    - cat
+    tty: true 
+          """
+        }
+      }
+      steps {
+        withCredentials([usernamePassword(credentialsId: "admin-cli-token", usernameVariable: 'JENKINS_CLI_USR', passwordVariable: 'JENKINS_CLI_PSW')]) {
+          sh '''
+            curl --user $JENKINS_CLI_USR:$JENKINS_CLI_PSW -XPOST -H "Accept: application/json" https://cjoc.rimacdevsecops.com.pe/load-casc-bundles/checkout
+            curl --user $JENKINS_CLI_USR:$JENKINS_CLI_PSW -XGET -H "Accept: application/json" ${jenkinsUrl}casc-bundle-mgnt/check-bundle-update
+            curl -s --user $JENKINS_CLI_USR:$JENKINS_CLI_PSW -XPOST -H "Accept: application/json" ${jenkinsUrl}casc-bundle-mgnt/reload-bundle
+          '''
+        }
+      }
+    }
+  }
+}
