@@ -1,3 +1,4 @@
 plugins:
 # non-cap plugins
 - id: pipeline-utility-steps
+- id: hashicorp-vault-plugin
