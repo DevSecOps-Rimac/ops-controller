@@ -47,8 +47,8 @@ pipeline {
                   }
                   sh '''
                     ls -la ${BUNDLE_ID}
-                    kubectl exec cjoc-0 -c jenkins -- rm -rf /var/jenkins_config/jcasc-bundles-store/${BUNDLE_ID}/
-                    kubectl cp --namespace cloudbees-core ${BUNDLE_ID} cjoc-0:/var/jenkins_config/jcasc-bundles-store/ -c jenkins
+                    kubectl exec cjoc-0 -c jenkins -- rm -rf /var/jenkins_home/cb-casc-bundles-store/${BUNDLE_ID}/
+                    kubectl cp --namespace cloudbees-core ${BUNDLE_ID} cjoc-0:/var/jenkins_home/cb-casc-bundles-store/ -c jenkins
                   '''
                   
                   withCredentials([usernamePassword(credentialsId: 'admin-cli-token', usernameVariable: 'JENKINS_CLI_USR', passwordVariable: 'JENKINS_CLI_PSW')]) {
