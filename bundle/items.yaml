@@ -80,8 +80,38 @@ items:
                     branches:
                     - branchSpec:
                         name: '*/main'
-                lightweight: true
+                lightweight: true    
     properties:
     - suppressFolderAutomaticTriggering:
         strategy: INDEXING
         branches: .*
+  - concurrentBuild: true
+    kind: pipeline
+    displayName: controller-casc-reload
+    resumeBlocked: false
+    name: controller-casc-reload
+    description: ''
+    definition:
+      cpsScmFlowDefinition:
+        scriptPath: controller-casc-reload
+        scm:
+          gitSCM:
+            gitTool: Default
+            userRemoteConfigs:
+            - userRemoteConfig:
+                credentialsId: cloudbees-ci-casc-workshop-github-app
+                url: https://github.com/${GITHUB_ORGANIZATION}/ops-controller.git
+            branches:
+            - branchSpec:
+                name: main
+        lightweight: true
+    disabled: false
+    properties:
+    - githubProjectProperty:
+        projectUrlStr: https://github.com/${GITHUB_ORGANIZATION}/ops-controller
+    - pipelineTriggers:
+        triggers:
+        - eventTrigger:
+            condition:
+              jmespathQuery:
+                query: controller.action=='casc_bundle_update'

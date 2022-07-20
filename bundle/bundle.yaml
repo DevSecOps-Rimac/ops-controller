@@ -3,7 +3,7 @@ version: "5"
 id: "DevSecOps-Rimac-ops-controller"
 description: "CloudBees CI configuration bundle for the DevSecOps-Rimac ops-controller Controller"
 parent: "base"
-availabilityPattern: "cloudbees-ci-casc-workshop/devsecops-rimac/ops-controller"
+availabilityPattern: ".*"
 jcasc:
   - "jcasc/"
 plugins:
