@@ -87,13 +87,13 @@ items:
         branches: .*
   - concurrentBuild: true
     kind: pipeline
-    displayName: controller-casc-reload
+    displayName: casc-bundle-update
     resumeBlocked: false
     name: controller-casc-reload
     description: ''
     definition:
       cpsScmFlowDefinition:
-        scriptPath: controller-casc-reload
+        scriptPath: casc-bundle-update
         scm:
           gitSCM:
             gitTool: Default
@@ -115,3 +115,33 @@ items:
             condition:
               jmespathQuery:
                 query: controller.action=='casc_bundle_update'
+  - concurrentBuild: true
+    kind: pipeline
+    displayName: provision-managed-controller
+    resumeBlocked: false
+    name: provision-managed-controller
+    description: ''
+    definition:
+      cpsScmFlowDefinition:
+        scriptPath: provision-managed-controller
+        scm:
+          gitSCM:
+            gitTool: Default
+            userRemoteConfigs:
+            - userRemoteConfig:
+                credentialsId: cloudbees-ci-casc-workshop-github-app
+                url: https://github.com/${GITHUB_ORGANIZATION}/ops-controller.git
+            branches:
+            - branchSpec:
+                name: main
+        lightweight: true
+    disabled: false
+    properties:
+    - githubProjectProperty:
+        projectUrlStr: https://github.com/${GITHUB_ORGANIZATION}/ops-controller
+    - pipelineTriggers:
+        triggers:
+        - eventTrigger:
+            condition:
+              jmespathQuery:
+                query: controller.action=='provision'
