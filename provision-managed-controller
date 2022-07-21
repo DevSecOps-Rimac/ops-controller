@@ -48,8 +48,7 @@ pipeline {
             ls -la ${BUNDLE_ID}
             kubectl cp --namespace cloudbees-core ${BUNDLE_ID} cjoc-0:/var/jenkins_home/cb-casc-bundles-store/ -c jenkins
           '''
-        }
-        withCredentials([usernamePassword(credentialsId: "admin-cli-token", usernameVariable: 'JENKINS_CLI_USR', passwordVariable: 'JENKINS_CLI_PSW')]) {
+          withCredentials([usernamePassword(credentialsId: "admin-cli-token", usernameVariable: 'JENKINS_CLI_USR', passwordVariable: 'JENKINS_CLI_PSW')]) {
           sh '''          
             curl -O http://cjoc/jnlpJars/jenkins-cli.jar
             alias cli='java -jar jenkins-cli.jar -s http://cjoc/ -auth $JENKINS_CLI_USR:$JENKINS_CLI_PSW'
@@ -62,6 +61,7 @@ pipeline {
               --data-binary @./controller.yaml -H 'Content-Type:text/yaml'
           '''
         }
+        }        
       }
     }
   }
