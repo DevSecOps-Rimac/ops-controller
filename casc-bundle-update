@@ -1,27 +1,7 @@
 def event = currentBuild.getBuildCauses()[0].event
-//library 'pipeline-library'
+library 'pipeline-library'
 pipeline {
-  agent {
-        kubernetes {
-            label 'kubectl'
-            yaml """
-kind: Pod
-metadata:
-    name: kubectl
-spec:
-    serviceAccountName: jenkins
-    containers:
-    - name: kubectl
-      image: gcr.io/cloud-builders/kubectl
-      resources:
-        requests:
-            memory: "500Mi"
-      command:
-      - cat
-      tty: true 
-    """
-        }
-      }
+  agent none
   environment {
     OPS_CASC_UPDATE_SECRET = credentials('casc-update-secret')
     CONTROLLER_CASC_UPDATE_SECRET = event.secret.toString()
@@ -32,7 +12,12 @@ spec:
     eventTrigger jmespathQuery("controller.action=='casc_bundle_update'")
   }
   stages {
-    stage('Configuration Bundle Update') {      
+    stage('Configuration Bundle Update') {
+      agent {
+        kubernetes {
+          yaml libraryResource ('podtemplates/kubectl.yml')
+        }
+      }
       environment {       
         GITHUB_ORGANIZATION = event.github.organization.toString().replaceAll(" ", "-")
         GITHUB_REPOSITORY = event.github.repository.toString().toLowerCase()
