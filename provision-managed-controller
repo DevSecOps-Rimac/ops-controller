@@ -53,7 +53,7 @@ pipeline {
           sh '''          
             curl -O http://cjoc/jnlpJars/jenkins-cli.jar
             alias cli='java -jar jenkins-cli.jar -s http://cjoc/ -auth $JENKINS_CLI_USR:$JENKINS_CLI_PSW'
-            cli -webSocke casc-items-create-items /$WORKSHOP_ID = < ./controller.yaml
+            cli -webSocket casc-items-create-items /$WORKSHOP_ID = < ./controller.yaml
             curl --user "$ADMIN_CLI_TOKEN_USR:$ADMIN_CLI_TOKEN_PSW" -XPOST \
               http://cjoc/load-casc-bundles/checkout
             curl --user "$ADMIN_CLI_TOKEN_USR:$ADMIN_CLI_TOKEN_PSW" -XPOST \
