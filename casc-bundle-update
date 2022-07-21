@@ -19,18 +19,18 @@ pipeline {
             yaml """
 kind: Pod
 metadata:
-name: kubectl
+    name: kubectl
 spec:
-serviceAccountName: cjoc
-containers:
-- name: kubectl
-    image: gcr.io/cloud-builders/kubectl
-    resources:
-    requests:
-        memory: "500Mi"
-    command:
-    - cat
-    tty: true 
+    serviceAccountName: cjoc
+    containers:
+    - name: kubectl
+      image: gcr.io/cloud-builders/kubectl
+      resources:
+        requests:
+            memory: "500Mi"
+        command:
+        - cat
+        tty: true 
     """
         }
       }
