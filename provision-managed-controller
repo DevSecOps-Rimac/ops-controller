@@ -47,8 +47,9 @@ pipeline {
           sh '''
             ls -la ${BUNDLE_ID}
             kubectl cp --namespace cloudbees-core ${BUNDLE_ID} cjoc-0:/var/jenkins_home/cb-casc-bundles-store/ -c jenkins
-          '''
-          withCredentials([usernamePassword(credentialsId: "admin-cli-token", usernameVariable: 'JENKINS_CLI_USR', passwordVariable: 'JENKINS_CLI_PSW')]) {
+          '''          
+        }
+        withCredentials([usernamePassword(credentialsId: "admin-cli-token", usernameVariable: 'JENKINS_CLI_USR', passwordVariable: 'JENKINS_CLI_PSW')]) {
             sh '''
               ls -la
               curl -O http://cjoc/jnlpJars/jenkins-cli.jar
@@ -60,8 +61,7 @@ pipeline {
                 http://cjoc/casc-items/create-items \
                 --data-binary @checkout/folder.yaml -H 'Content-Type:text/yaml'
             '''
-          }
-        }        
+          }      
       }
     }
   }
