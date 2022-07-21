@@ -27,3 +27,4 @@ plugins:
 - id: workflow-aggregator
 - id: workflow-cps-checkpoint
 - id: hashicorp-vault-plugin
+- id: cloudbees-restricted-credentials
