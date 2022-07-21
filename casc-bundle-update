@@ -1,5 +1,5 @@
 def event = currentBuild.getBuildCauses()[0].event
-library 'pipeline-library'
+//library 'pipeline-library'
 pipeline {
   agent none
   environment {
