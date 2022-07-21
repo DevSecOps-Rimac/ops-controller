@@ -15,8 +15,8 @@ pipeline {
     stage('Configuration Bundle Update') {
       agent {
         kubernetes {
-        label 'kubectl'
-        yaml """
+            label 'kubectl'
+            yaml """
 kind: Pod
 metadata:
 name: kubectl
