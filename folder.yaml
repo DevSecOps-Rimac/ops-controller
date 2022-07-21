@@ -1,0 +1,79 @@
+removeStrategy:
+  rbac: SYNC
+  items: NONE
+items:
+- kind: managedController
+  name: dev-controller
+  properties:
+  - healthReporting:
+      enabled: true
+  - configurationAsCode:
+      bundle: devsecops-rimac-dev-controller
+  configuration:
+    kubernetes:
+      memory: 4000
+      cpus: 1.0
+      clusterEndpointId: default
+      disk: 10
+      storageClassName: gp2
+      domain: devsecops-rimac-dev-controller
+      namespace: cloudbees-core
+      yaml: |
+        kind: StatefulSet
+        spec:
+          template:
+            metadata:
+              annotations:
+                vault.hashicorp.com/agent-inject: "true"
+                vault.hashicorp.com/role: "kubernetes_devsecops_role"
+                vault.hashicorp.com/agent-inject-secret-OCControllerProvisionSecret: "secretos/OCControllerProvisionSecret"
+                vault.hashicorp.com/agent-inject-template-OCControllerProvisionSecret: |
+                  {{- with secret "secretos/OCControllerProvisionSecret" -}} 
+                  {{ .Data.data.token }}
+                  {{- end }}
+                vault.hashicorp.com/agent-inject-secret-gitHubWebhookSecret: "secretos/gitHubWebhookSecret"
+                vault.hashicorp.com/agent-inject-template-gitHubWebhookSecret: |
+                  {{- with secret "secretos/gitHubWebhookSecret" -}} 
+                  {{ .Data.data.token }}
+                  {{- end }}
+                vault.hashicorp.com/agent-inject-secret-myGithubAppRimacGithubAppId: "secretos/myGithubAppRimacGithubAppId"
+                vault.hashicorp.com/agent-inject-template-myGithubAppRimacGithubAppId: |
+                  {{- with secret "secretos/myGithubAppRimacGithubAppId" -}} 
+                  {{ .Data.data.appid }}
+                  {{- end }}
+                vault.hashicorp.com/agent-inject-secret-myGithubAppRimacGitHubAppPrivateKey: "secretos/myGithubAppRimacGitHubAppPrivateKey"
+                vault.hashicorp.com/agent-inject-template-myGithubAppRimacGitHubAppPrivateKey: |
+                  {{- with secret "secretos/myGithubAppRimacGitHubAppPrivateKey" -}} 
+                  {{ .Data.data.pem }}
+                  {{- end }}
+                vault.hashicorp.com/agent-inject-secret-config: "secretos/config"
+                vault.hashicorp.com/agent-inject-template-config: |
+                  {{- with secret "secretos/config" -}} 
+                  {{ .Data.data.username }}:{{ .Data.data.password }}
+                  {{- end }}
+                vault.hashicorp.com/agent-inject-secret-vault: "secretos/vault_cloudbees_ci"
+                vault.hashicorp.com/agent-inject-template-vault: |
+                  {{- with secret "secretos/vault_cloudbees_ci" -}} 
+                  CASC_VAULT_APPROLE={{ .Data.data.role_id }}
+                  CASC_VAULT_APPROLE_SECRET={{ .Data.data.secret_id }}
+                  CASC_VAULT_PATHS=secretos/OCControllerProvisionSecret,secretos/gitHubWebhookSecret,secretos/myGithubAppRimacGithubAppId,secretos/myGithubAppRimacGitHubAppPrivateKey,secretos/config
+                  CASC_VAULT_URL=https://vaultdesa.rimac.com.pe
+                  CASC_VAULT_NAMESPACE=tools
+                  {{- end }}
+                vault.hashicorp.com/namespace: "tools"
+            spec:
+              containers:
+                - name: jenkins
+                  env:
+                  - name: CASC_VAULT_FILE
+                    value: "/vault/secrets/vault"
+                  - name: "GITHUB_ORGANIZATION"
+                    value: "DevSecOps-Rimac"
+                  - name: "GITHUB_USER"
+                    value: "jsanchem"
+                  - name: "GITHUB_APP"
+                    value: "cloudbees-ci-casc-workshop"
+                  - name: "CONTROLLER_SUBDOMAIN"
+                    value: "devsecops-rimac-dev-controller"
+                  - name: "CASC_BUNDLE_ID"
+                    value: "devsecops-rimac-dev-controller"
