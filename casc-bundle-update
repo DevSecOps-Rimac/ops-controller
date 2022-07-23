@@ -35,13 +35,17 @@ pipeline {
             stage('Copy Files') {
               steps {
                 container("kubectl") {
-                  sh '''
-                    rm -rf ./${BUNDLE_ID} || true
-                    rm -rf ./checkout || true
-                    mkdir -p ${BUNDLE_ID}
-                    mkdir -p checkout
-                    git clone https://github.com/${GITHUB_ORGANIZATION}/${GITHUB_REPOSITORY}.git checkout
-                  '''
+                  withCredentials([usernamePassword(credentialsId: "cloudbees-ci-casc-workshop-github-app",
+                                          usernameVariable: 'GITHUB_APP',
+                                          passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
+                    sh '''
+                      rm -rf ./${BUNDLE_ID} || true
+                      rm -rf ./checkout || true
+                      mkdir -p ${BUNDLE_ID}
+                      mkdir -p checkout
+                      git clone https://github.com/${GITHUB_ORGANIZATION}/${GITHUB_REPOSITORY}.git checkout
+                    '''
+                  }
                   dir('checkout/bundle') {
                     sh "cp --parents `find -name \\*.yaml*` ../../${BUNDLE_ID}/"
                   }
