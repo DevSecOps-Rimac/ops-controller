@@ -32,9 +32,9 @@ items:
         cpus: 1.0
         clusterEndpointId: default
         disk: 10
-        storageClassName: gp2
+        storageClassName: 
         domain: devsecops-rimac-ops-controller
-        namespace: cloudbees-core
+        namespace: 
         yaml: |
           kind: StatefulSet
           spec:
