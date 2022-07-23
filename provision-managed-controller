@@ -55,13 +55,11 @@ pipeline {
         }
         withCredentials([usernamePassword(credentialsId: "admin-cli-token", usernameVariable: 'JENKINS_CLI_USR', passwordVariable: 'JENKINS_CLI_PSW')]) {
             sh '''
-              cat checkout/controller.yaml
-              cat ./checkout/controller.yaml
               curl --user "$ADMIN_CLI_TOKEN_USR:$ADMIN_CLI_TOKEN_PSW" -XPOST \
                 http://cjoc/load-casc-bundles/checkout
               curl --user "$ADMIN_CLI_TOKEN_USR:$ADMIN_CLI_TOKEN_PSW" -XPOST \
                 http://cjoc/casc-items/create-items \
-                --data-binary @checkout/controller.yaml -H 'Content-Type:text/yaml'
+                --data-binary @./checkout/controller.yaml -H 'Content-Type:text/yaml'
             '''
           }      
       }
