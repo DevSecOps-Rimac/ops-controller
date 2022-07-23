@@ -40,7 +40,7 @@ pipeline {
               rm -rf ./checkout || true
               mkdir -p ${BUNDLE_ID}
               mkdir -p checkout
-              git clone https://github.com/${GITHUB_ORGANIZATION}/${GITHUB_REPOSITORY}.git checkout
+              git clone https://x-access-token:${GITHUB_ACCESS_TOKEN}@github.com/${GITHUB_ORGANIZATION}/${GITHUB_REPOSITORY}.git checkout
             '''
           }
           dir('checkout/bundle') {
